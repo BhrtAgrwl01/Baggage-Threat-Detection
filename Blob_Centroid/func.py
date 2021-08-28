@@ -11,6 +11,6 @@ def auto_canny(image, sigma=0.33):
 	return cv2.Canny(image, lower, upper)
 
 def thresh_optima(img):
-    high_thresh, thresh_im = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    high_thresh = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[0]
     low_thresh = 0.5*high_thresh
     return low_thresh, high_thresh
