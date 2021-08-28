@@ -2,7 +2,8 @@ import cv2  # OpenCV2 library
 import numpy as np   #Numpy library for mathematical and array manipulations
 from auto_canny import auto_canny, thresh_optima
 
-image1 = cv2.imread(r"Blob_Centroid\test.png") # Reads the image and stores in image array
+image1 = cv2.imread(r"Blob_Centroid\f.jpeg") # Reads the image and stores in image array
+
 image = cv2.bitwise_not(image1) # Inverted image for thresholding and contouring
 
 height, width, channels = image1.shape # Returns the height, width and the number of channels in the shape
@@ -19,12 +20,12 @@ thresh = edged#cv2.adaptiveThreshold(edged,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, c
 # thresh = cv2.erode(thresh, None, iterations=2)
 # thresh = cv2.dilate(thresh, None, iterations=2)
 
-contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) # Finds all the closed shapes (called contours) in the image
+contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE) # Finds all the closed shapes (called contours) in the image
 
 for cnt in contours:
 
     area = cv2.contourArea(cnt)
-    if area > 100:
+    if area > 10:
         M = cv2.moments(cnt) # Finding moments of the contour
 
         if M["m00"] == 0:
