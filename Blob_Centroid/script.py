@@ -2,13 +2,18 @@ import cv2
 import numpy as np
 from func import auto_canny, thresh_optima
 
-image1 = cv2.imread(r"Blob_Centroid\d.jpeg")
+image1 = cv2.imread(r"Blob_Centroid\e.jpeg")
 
 image = cv2.bitwise_not(image1)
 
 height, width, channels = image1.shape
 imgray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-blurred = cv2.GaussianBlur(imgray, (3, 3), 0)
+# blurred = cv2.GaussianBlur(imgray, (3, 3), 0)
+sharped = cv2.filter2D(imgray, -1, np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]]))
+# sharped = cv2.filter2D(sharped, -1, np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]]))
+blurred = cv2.GaussianBlur(sharped, (3, 3), 0)
+blurred = cv2.GaussianBlur(blurred, (3, 3), 0)
+
 edged = cv2.Canny(blurred, *thresh_optima(blurred))
 # edged = auto_canny(blurred)
 
@@ -24,7 +29,7 @@ contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_N
 for cnt in contours:
 
     area = cv2.contourArea(cnt)
-    if area > 10:
+    if area > 8:
         M = cv2.moments(cnt) # Moments of the contour
 
         if M["m00"] == 0:
@@ -48,7 +53,7 @@ for cnt in contours:
         cv2.putText(image1,heightstr, (0, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
         cv2.putText(image1,widthstr, (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
 
-cv2.drawContours(image1, contours, -1, (0, 255, 0), 3)
+cv2.drawContours(image1, contours, -1, (0, 255, 0), 2)
 # cv2.imshow('image threshold',image1)
 # cv2.imshow('image',contours)
 
